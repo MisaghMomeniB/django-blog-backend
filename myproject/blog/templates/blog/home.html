@@ -399,10 +399,7 @@
           <h2 class="post-title"><a href="#">{{ post.title }}</a></h2>
           <div class="post-meta">
             <span class="date-badge">{{ post.created_at|date:"M d, Y" }}</span>
-            <span class="author"
-              >by {% if post.author %}{{ post.author }}{% else %}Anonymous{%
-              endif %}</span
-            >
+            <span class="author">by {% if post.author %}{{ post.author }}{% else %}Anonymous{% endif %}</span>
             <span>·</span>
             <span>💬 3</span>
           </div>
