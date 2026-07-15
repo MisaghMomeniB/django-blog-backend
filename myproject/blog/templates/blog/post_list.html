@@ -15,7 +15,6 @@
 
     <link rel="stylesheet" href="{% static 'css/blog.css' %}" />
   </head>
-
   <body>
     <div class="page">
       <header class="site-header">
@@ -40,8 +39,7 @@
           {% for post in posts %}
           <li class="post-card">
             <h2 class="post-card__title">
-              {# TODO: link to post detail once the view exists #}
-              <a href="#">{{ post.title }}</a>
+              <a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a>
             </h2>
             <div class="post-card__meta">
               <time

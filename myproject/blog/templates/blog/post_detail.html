@@ -1,0 +1,40 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ post.title }}</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="{% static 'css/blog.css' %}" />
+  </head>
+  <body>
+    <div class="page">
+      <a href="{% url 'post_list' %}" class="back-link"
+        >&larr; Back to all posts</a
+      >
+
+      <article class="post-detail">
+        <h1 class="post-detail__title">{{ post.title }}</h1>
+        <div class="post-detail__meta">
+          <time datetime="{{ post.created_at|date:'Y-m-d' }}">
+            {{ post.created_at|date:"M d, Y" }}
+          </time>
+          <span class="post-detail__author"
+            >{{ post.author|default:"Anonymous" }}</span
+          >
+        </div>
+        <div class="post-detail__content">{{ post.content|linebreaks }}</div>
+      </article>
+    </div>
+
+    <script src="{% static 'js/blog.js' %}"></script>
+  </body>
+</html>
