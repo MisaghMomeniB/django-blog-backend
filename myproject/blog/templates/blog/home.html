@@ -1,3 +1,4 @@
+{% load static %}
 <!doctype html>
 <html lang="en">
   <head>
@@ -5,460 +6,75 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>My Blog</title>
 
-    <!-- Google Fonts (variable) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
 
-    <style>
-      /* ----- Reset & variables ----- */
-      *,
-      *::before,
-      *::after {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-
-      :root {
-        --bg: #f3f1ed;
-        --surface: rgba(255, 255, 255, 0.7);
-        --surface-border: rgba(255, 255, 255, 0.4);
-        --text-primary: #1a1a2e;
-        --text-secondary: #4a4a5e;
-        --text-muted: #7a7a8c;
-        --accent: #7c5cfc;
-        --accent-glow: rgba(124, 92, 252, 0.3);
-        --card-shadow: 0 12px 40px rgba(0, 0, 0, 0.06);
-        --card-hover-shadow: 0 20px 60px rgba(124, 92, 252, 0.12);
-        --transition: 0.35s cubic-bezier(0.22, 1, 0.36, 1);
-      }
-
-      /* Dark mode */
-      [data-theme="dark"] {
-        --bg: #12121a;
-        --surface: rgba(30, 30, 46, 0.75);
-        --surface-border: rgba(255, 255, 255, 0.08);
-        --text-primary: #f0eeed;
-        --text-secondary: #c0bebe;
-        --text-muted: #8888a0;
-        --accent: #a78bfa;
-        --accent-glow: rgba(167, 139, 250, 0.25);
-        --card-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
-        --card-hover-shadow: 0 20px 60px rgba(167, 139, 250, 0.15);
-      }
-
-      /* Base */
-      body {
-        font-family: "Inter", sans-serif;
-        background: var(--bg);
-        color: var(--text-primary);
-        min-height: 100vh;
-        padding: 2rem 1.5rem;
-        display: flex;
-        justify-content: center;
-        align-items: flex-start;
-        transition:
-          background var(--transition),
-          color var(--transition);
-        line-height: 1.6;
-      }
-
-      /* Animated background gradient (subtle) */
-      body::before {
-        content: "";
-        position: fixed;
-        inset: 0;
-        z-index: -1;
-        background:
-          radial-gradient(
-            circle at 20% 30%,
-            var(--accent-glow) 0%,
-            transparent 50%
-          ),
-          radial-gradient(
-            circle at 80% 70%,
-            rgba(236, 72, 153, 0.1) 0%,
-            transparent 50%
-          );
-        opacity: 0.6;
-        transition: opacity var(--transition);
-      }
-      [data-theme="dark"] body::before {
-        opacity: 0.3;
-      }
-
-      /* Main container – glassmorphism */
-      .blog-container {
-        max-width: 880px;
-        width: 100%;
-        background: var(--surface);
-        backdrop-filter: blur(16px) saturate(180%);
-        -webkit-backdrop-filter: blur(16px) saturate(180%);
-        border: 1px solid var(--surface-border);
-        border-radius: 2.5rem;
-        padding: 2.8rem 3rem;
-        box-shadow: var(--card-shadow);
-        transition:
-          background var(--transition),
-          border var(--transition),
-          box-shadow var(--transition);
-      }
-
-      @media (max-width: 640px) {
-        body {
-          padding: 1rem;
-        }
-        .blog-container {
-          padding: 1.8rem 1.2rem;
-          border-radius: 1.8rem;
-        }
-      }
-
-      /* ----- Header ----- */
-      .blog-header {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 2.8rem;
-        padding-bottom: 1.2rem;
-        border-bottom: 1px solid var(--surface-border);
-        transition: border var(--transition);
-      }
-
-      .header-left {
-        display: flex;
-        flex-direction: column;
-        gap: 0.2rem;
-      }
-
-      .blog-title {
-        font-size: 2.4rem;
-        font-weight: 800;
-        letter-spacing: -0.03em;
-        background: linear-gradient(135deg, var(--accent), #ec4899);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        display: inline-block;
-        animation: shimmer 4s ease-in-out infinite alternate;
-      }
-      @keyframes shimmer {
-        0% {
-          filter: hue-rotate(0deg);
-        }
-        100% {
-          filter: hue-rotate(15deg);
-        }
-      }
-
-      .blog-subtitle {
-        font-size: 0.95rem;
-        color: var(--text-secondary);
-        font-weight: 400;
-        letter-spacing: 0.01em;
-        display: flex;
-        align-items: center;
-        gap: 0.4rem;
-      }
-      .blog-subtitle .cursor {
-        display: inline-block;
-        width: 2px;
-        height: 1.1em;
-        background: var(--accent);
-        animation: blink 1s step-end infinite;
-      }
-      @keyframes blink {
-        0%,
-        100% {
-          opacity: 1;
-        }
-        50% {
-          opacity: 0;
-        }
-      }
-
-      /* Theme toggle */
-      .theme-toggle {
-        background: var(--surface);
-        border: 1px solid var(--surface-border);
-        border-radius: 60px;
-        padding: 0.5rem 1rem;
-        display: flex;
-        align-items: center;
-        gap: 0.6rem;
-        cursor: pointer;
-        font-size: 0.9rem;
-        font-weight: 500;
-        color: var(--text-secondary);
-        transition: all var(--transition);
-        backdrop-filter: blur(8px);
-      }
-      .theme-toggle:hover {
-        border-color: var(--accent);
-        box-shadow: 0 0 20px var(--accent-glow);
-        transform: scale(1.02);
-      }
-      .theme-toggle .icon {
-        font-size: 1.2rem;
-        line-height: 1;
-      }
-
-      /* ----- Post list ----- */
-      .post-list {
-        list-style: none;
-        display: flex;
-        flex-direction: column;
-        gap: 1.8rem;
-      }
-
-      .post-item {
-        background: var(--surface);
-        backdrop-filter: blur(8px);
-        border: 1px solid var(--surface-border);
-        border-radius: 1.5rem;
-        padding: 1.8rem 2rem;
-        transition: all var(--transition);
-        box-shadow: var(--card-shadow);
-        animation: fadeUp 0.6s ease forwards;
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      .post-item:nth-child(1) {
-        animation-delay: 0.05s;
-      }
-      .post-item:nth-child(2) {
-        animation-delay: 0.15s;
-      }
-      .post-item:nth-child(3) {
-        animation-delay: 0.25s;
-      }
-      .post-item:nth-child(4) {
-        animation-delay: 0.35s;
-      }
-      .post-item:nth-child(5) {
-        animation-delay: 0.45s;
-      }
-
-      @keyframes fadeUp {
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-
-      .post-item:hover {
-        border-color: var(--accent);
-        box-shadow: var(--card-hover-shadow);
-        transform: translateY(-4px) scale(1.01);
-      }
-
-      .post-title {
-        font-size: 1.5rem;
-        font-weight: 700;
-        letter-spacing: -0.01em;
-        color: var(--text-primary);
-        margin-bottom: 0.2rem;
-        transition: color var(--transition);
-      }
-      .post-title a {
-        color: inherit;
-        text-decoration: none;
-      }
-      .post-title a:hover {
-        color: var(--accent);
-      }
-
-      .post-meta {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        gap: 0.5rem 1rem;
-        font-size: 0.8rem;
-        color: var(--text-muted);
-        margin-bottom: 0.8rem;
-      }
-      .post-meta .date-badge {
-        background: var(--surface-border);
-        padding: 0.15rem 0.8rem;
-        border-radius: 40px;
-        font-weight: 600;
-        color: var(--text-secondary);
-        font-size: 0.7rem;
-        text-transform: uppercase;
-        letter-spacing: 0.03em;
-      }
-      .post-meta .author {
-        font-weight: 500;
-      }
-
-      .post-excerpt {
-        font-size: 1rem;
-        color: var(--text-secondary);
-        line-height: 1.7;
-      }
-      .post-excerpt::after {
-        content: "…";
-        color: var(--text-muted);
-      }
-
-      /* ----- Empty state ----- */
-      .empty-state {
-        text-align: center;
-        padding: 3.5rem 1.5rem;
-        background: var(--surface);
-        border: 2px dashed var(--surface-border);
-        border-radius: 2rem;
-        backdrop-filter: blur(8px);
-      }
-      .empty-state .emoji {
-        font-size: 3rem;
-        display: block;
-        margin-bottom: 0.6rem;
-      }
-      .empty-state p {
-        font-size: 1.1rem;
-        color: var(--text-secondary);
-      }
-
-      /* ----- Admin link ----- */
-      .admin-link-wrap {
-        margin-top: 2.8rem;
-        text-align: center;
-        border-top: 1px solid var(--surface-border);
-        padding-top: 2rem;
-      }
-      .admin-link {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.6rem;
-        background: var(--accent);
-        color: #fff;
-        font-weight: 600;
-        font-size: 0.95rem;
-        padding: 0.75rem 2.2rem;
-        border-radius: 60px;
-        text-decoration: none;
-        transition: all var(--transition);
-        box-shadow: 0 4px 20px var(--accent-glow);
-        border: 1px solid transparent;
-      }
-      .admin-link:hover {
-        transform: translateY(-3px) scale(1.02);
-        box-shadow: 0 12px 40px var(--accent-glow);
-        background: #6d4df0;
-      }
-      .admin-link:active {
-        transform: scale(0.96);
-      }
-
-      /* ----- Responsive fine-tune ----- */
-      @media (max-width: 600px) {
-        .blog-header {
-          flex-direction: column;
-          align-items: flex-start;
-          gap: 1rem;
-        }
-        .theme-toggle {
-          align-self: flex-start;
-        }
-        .blog-title {
-          font-size: 2rem;
-        }
-        .post-item {
-          padding: 1.2rem 1.2rem;
-        }
-      }
-    </style>
+    <link rel="stylesheet" href="{% static 'css/blog.css' %}" />
   </head>
+
   <body>
-    <div class="blog-container">
-      <!-- Header with theme toggle -->
-      <header class="blog-header">
-        <div class="header-left">
-          <h1 class="blog-title">✦ Blog Posts</h1>
-          <div class="blog-subtitle">
-            <span>Stories &amp; ideas from the desk</span>
-            <span class="cursor"></span>
-          </div>
+    <div class="page">
+      <header class="site-header">
+        <div class="site-header__text">
+          <h1 class="site-title">Blog Posts</h1>
+          <p class="site-subtitle">Stories &amp; ideas from the desk</p>
         </div>
-        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
-          <span class="icon" id="themeIcon">🌙</span>
-          <span id="themeLabel">Dark</span>
+        <button
+          class="theme-toggle"
+          id="themeToggle"
+          type="button"
+          aria-label="Toggle dark mode"
+        >
+          <span class="theme-toggle__icon" id="themeIcon"></span>
+          <span id="themeLabel">Dark mode</span>
         </button>
       </header>
 
-      <!-- Post list -->
-      <ul class="post-list">
-        {% for post in posts %}
-        <li class="post-item">
-          <h2 class="post-title"><a href="#">{{ post.title }}</a></h2>
-          <div class="post-meta">
-            <span class="date-badge">{{ post.created_at|date:"M d, Y" }}</span>
-            <span class="author">by {% if post.author %}{{ post.author }}{% else %}Anonymous{% endif %}</span>
-            <span>·</span>
-            <span>💬 3</span>
-          </div>
-          <p class="post-excerpt">{{ post.content|truncatewords:20 }}</p>
-        </li>
-        {% empty %}
-        <li class="empty-state">
-          No posts found. Add one from the admin panel.
-        </li>
-        {% endfor %}
-      </ul>
+      <main>
+        {% if posts %}
+        <ul class="post-list">
+          {% for post in posts %}
+          <li class="post-card">
+            <h2 class="post-card__title">
+              {# TODO: link to post detail once the view exists #}
+              <a href="#">{{ post.title }}</a>
+            </h2>
+            <div class="post-card__meta">
+              <time
+                class="post-card__date"
+                datetime="{{ post.created_at|date:'Y-m-d' }}"
+              >
+                {{ post.created_at|date:"M d, Y" }}
+              </time>
+              <span class="post-card__author"
+                >{{ post.author|default:"Anonymous" }}</span
+              >
+            </div>
+            <p class="post-card__excerpt">
+              {{ post.content|truncatewords:20 }}
+            </p>
+          </li>
+          {% endfor %}
+        </ul>
+        {% else %}
+        <div class="empty-state">
+          <p class="empty-state__title">No posts yet</p>
+          <p class="empty-state__text">
+            New posts will show up here once they're published.
+          </p>
+        </div>
+        {% endif %}
+      </main>
 
-      <!-- Admin link -->
-      <div class="admin-link-wrap">
-        <a href="/admin" class="admin-link">
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-            <path
-              d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"
-            />
-          </svg>
-          Go to Admin
-        </a>
-      </div>
+      <footer class="site-footer">
+        <a href="{% url 'admin:index' %}" class="admin-link">Go to Admin</a>
+      </footer>
     </div>
 
-    <script>
-      (function () {
-        const toggle = document.getElementById("themeToggle");
-        const icon = document.getElementById("themeIcon");
-        const label = document.getElementById("themeLabel");
-
-        // Check saved preference or system default
-        const prefersDark = window.matchMedia(
-          "(prefers-color-scheme: dark)",
-        ).matches;
-        let currentTheme =
-          localStorage.getItem("theme") || (prefersDark ? "dark" : "light");
-        applyTheme(currentTheme);
-
-        toggle.addEventListener("click", () => {
-          const newTheme =
-            document.documentElement.getAttribute("data-theme") === "dark"
-              ? "light"
-              : "dark";
-          applyTheme(newTheme);
-          localStorage.setItem("theme", newTheme);
-        });
-
-        function applyTheme(theme) {
-          document.documentElement.setAttribute("data-theme", theme);
-          if (theme === "dark") {
-            icon.textContent = "☀️";
-            label.textContent = "Light";
-          } else {
-            icon.textContent = "🌙";
-            label.textContent = "Dark";
-          }
-        }
-      })();
-    </script>
+    <script src="{% static 'js/blog.js' %}"></script>
   </body>
 </html>
